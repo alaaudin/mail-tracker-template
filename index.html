@@ -1,5 +1,4 @@
-
-html_content = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -872,6 +871,7 @@ html_content = '''<!DOCTYPE html>
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
     </style>
+<base target="_blank">
 </head>
 <body>
     <div class="bg-effects"></div>
@@ -1216,13 +1216,13 @@ html_content = '''<!DOCTYPE html>
             </div>
             <h2>Upgrade to Pro</h2>
             <p>Enter your subscription code to unlock all premium features including advanced analytics, unlimited tracking, and priority support.</p>
-            
+
             <input type="text" class="code-input" id="codeInput" placeholder="ENTER CODE" maxlength="12">
-            
+
             <button class="btn-primary" onclick="verifyCode()">
                 <i class="fas fa-unlock"></i> Verify & Activate
             </button>
-            
+
             <div class="success-message" id="successMessage">
                 <i class="fas fa-check-circle"></i> Subscription activated successfully! Welcome to Pro.
             </div>
@@ -1253,14 +1253,14 @@ html_content = '''<!DOCTYPE html>
             const input = document.getElementById('codeInput').value.trim().toUpperCase();
             const successMsg = document.getElementById('successMessage');
             const errorMsg = document.getElementById('errorMessage');
-            
+
             successMsg.style.display = 'none';
             errorMsg.style.display = 'none';
-            
+
             if (validCodes.includes(input)) {
                 successMsg.style.display = 'block';
                 isSubscribed = true;
-                
+
                 // Update UI after success
                 setTimeout(() => {
                     activateProFeatures();
@@ -1277,28 +1277,28 @@ html_content = '''<!DOCTYPE html>
             // Show verified badge
             const badge = document.getElementById('verifiedBadge');
             badge.classList.remove('hidden');
-            
+
             // Update user role
             document.getElementById('userRole').textContent = 'Pro Member';
             document.getElementById('userRole').style.color = 'var(--primary)';
-            
+
             // Update avatar
             const avatar = document.getElementById('userAvatar');
             avatar.style.background = 'linear-gradient(135deg, var(--primary), var(--secondary))';
             avatar.style.boxShadow = '0 0 20px rgba(0, 212, 170, 0.4)';
-            
+
             // Update sidebar badge
             const subBadge = document.getElementById('subBadge');
             subBadge.textContent = 'PRO';
             subBadge.classList.add('badge-pro');
-            
+
             // Unlock analytics
             const overlay = document.getElementById('lockedOverlay');
             if (overlay) {
                 overlay.style.opacity = '0';
                 setTimeout(() => overlay.style.display = 'none', 500);
             }
-            
+
             // Add glow effect to user profile
             document.querySelector('.user-profile').style.border = '1px solid rgba(0, 212, 170, 0.3)';
             document.querySelector('.user-profile').style.boxShadow = '0 0 20px rgba(0, 212, 170, 0.1)';
@@ -1323,10 +1323,4 @@ html_content = '''<!DOCTYPE html>
         }, 2000);
     </script>
 </body>
-</html>'''
-
-with open('/mnt/agents/output/mailtrack_pro_dashboard.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print("Dashboard created successfully!")
-print("File saved to: /mnt/agents/output/mailtrack_pro_dashboard.html")
+</html>
