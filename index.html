@@ -3,359 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProMail Tracker — Professional Email Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>ProMail Intelligence — Enterprise Email Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-card: rgba(255, 255, 255, 0.03);
-            --bg-glass: rgba(255, 255, 255, 0.05);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-muted: rgba(255, 255, 255, 0.4);
-            --accent: #00d4aa;
-            --accent-glow: rgba(0, 212, 170, 0.3);
-            --accent-secondary: #6366f1;
+            --bg-deep: #050505;
+            --bg-surface: #0a0a0a;
+            --bg-elevated: #0f0f0f;
+            --bg-card: rgba(255, 255, 255, 0.02);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+            --border-medium: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.12);
+            --text-primary: #f0f0f0;
+            --text-secondary: rgba(255, 255, 255, 0.55);
+            --text-tertiary: rgba(255, 255, 255, 0.35);
+            --accent: #00f0c8;
+            --accent-dim: rgba(0, 240, 200, 0.15);
+            --accent-glow: rgba(0, 240, 200, 0.4);
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #f59e0b;
             --danger: #ef4444;
-            --warning: #f59e0b;
             --success: #10b981;
-            --gradient-1: linear-gradient(135deg, rgba(0, 212, 170, 0.15), rgba(99, 102, 241, 0.15));
-            --gradient-2: linear-gradient(135deg, rgba(0, 212, 170, 0.1), transparent);
+            --warning: #f59e0b;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg-deep);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
+            background: var(--bg-deep);
             color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            cursor: default;
         }
 
-        /* Animated Background */
-        .bg-orb {
+        /* Custom Cursor */
+        .cursor-dot {
             position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            z-index: 0;
             pointer-events: none;
+            z-index: 99999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(0, 240, 200, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transition: all 0.15s ease-out;
+        }
+        .cursor-ring.hovering {
+            width: 60px;
+            height: 60px;
+            border-color: var(--accent);
+            background: rgba(0, 240, 200, 0.05);
         }
 
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: var(--accent);
-            top: -200px;
-            right: -100px;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: var(--accent-secondary);
-            bottom: -150px;
-            left: -100px;
-            animation: float 25s infinite ease-in-out reverse;
-        }
-
-        .orb-3 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 15s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.2); }
-        }
-
-        /* Noise Texture Overlay */
-        .noise-overlay {
+        /* Particle Canvas Background */
+        #particleCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.03;
-            z-index: 1;
+            z-index: 0;
             pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Layout */
+        /* Scanlines Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.03) 2px,
+                rgba(0,0,0,0.03) 4px
+            );
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Vignette */
+        .vignette {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* App Container */
         .app-container {
             position: relative;
-            z-index: 2;
+            z-index: 10;
             display: flex;
             min-height: 100vh;
         }
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
-            background: rgba(17, 17, 17, 0.8);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--border-glass);
-            padding: 32px 24px;
+            width: 300px;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(40px) saturate(180%);
+            border-right: 1px solid var(--border-subtle);
+            padding: 0;
             display: flex;
             flex-direction: column;
             position: fixed;
             height: 100vh;
-            z-index: 10;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--accent-dim), transparent);
+            opacity: 0.5;
+        }
+
+        .sidebar-header {
+            padding: 32px 28px 24px;
+            border-bottom: 1px solid var(--border-subtle);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 48px;
-            padding: 0 8px;
+            gap: 14px;
         }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-1);
-            border-radius: 12px;
+        .logo-mark {
+            width: 44px;
+            height: 44px;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--border-glass);
-            box-shadow: 0 0 20px var(--accent-glow);
         }
 
-        .logo-icon svg {
-            width: 20px;
-            height: 20px;
+        .logo-mark::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            opacity: 0.2;
+            filter: blur(8px);
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.1); }
+        }
+
+        .logo-mark svg {
+            width: 24px;
+            height: 24px;
             color: var(--accent);
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
         }
 
         .logo-text {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
-            font-size: 22px;
+            font-size: 24px;
             letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
         .logo-text span {
-            color: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .nav-section {
-            margin-bottom: 32px;
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 16px;
+            overflow-y: auto;
         }
 
+        .nav-section { margin-bottom: 32px; }
         .nav-label {
-            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-muted);
+            letter-spacing: 2px;
+            color: var(--text-tertiary);
             margin-bottom: 12px;
             padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-label::before {
+            content: '//';
+            color: var(--accent);
+            opacity: 0.5;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             padding: 12px 16px;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             margin-bottom: 4px;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-secondary);
             border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
 
         .nav-item:hover {
-            background: var(--bg-glass);
+            background: rgba(255, 255, 255, 0.03);
             color: var(--text-primary);
-            border-color: var(--border-glass);
+            border-color: var(--border-subtle);
+            transform: translateX(4px);
         }
 
         .nav-item.active {
-            background: var(--gradient-1);
+            background: linear-gradient(90deg, rgba(0, 240, 200, 0.08), rgba(0, 240, 200, 0.02));
             color: var(--accent);
-            border-color: rgba(0, 212, 170, 0.2);
-            box-shadow: 0 0 20px rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 240, 200, 0.1);
         }
+        .nav-item.active::before { transform: scaleY(1); }
 
-        .nav-item svg {
-            width: 18px;
-            height: 18px;
-        }
+        .nav-item svg { width: 18px; height: 18px; opacity: 0.7; transition: opacity 0.3s; }
+        .nav-item:hover svg, .nav-item.active svg { opacity: 1; }
 
         .nav-badge {
             margin-left: auto;
-            background: var(--accent);
-            color: var(--bg-primary);
-            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
             font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 20px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            border: 1px solid rgba(0, 240, 200, 0.2);
+            animation: badgePulse 2s ease-in-out infinite;
         }
 
-        /* User Profile */
-        .user-profile {
-            margin-top: auto;
-            padding: 16px;
-            background: var(--bg-glass);
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 240, 200, 0.2); }
+            50% { box-shadow: 0 0 0 4px rgba(0, 240, 200, 0); }
+        }
+
+        /* User Profile Card */
+        .user-card {
+            margin: 16px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
             border-radius: 16px;
-            border: 1px solid var(--border-glass);
-            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
         }
 
-        .user-info {
+        .user-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+            opacity: 0.5;
+        }
+
+        .user-card:hover {
+            border-color: var(--border-medium);
+            box-shadow: 0 0 30px rgba(0, 240, 200, 0.05);
+        }
+
+        .user-main {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .user-avatar-wrap {
+            position: relative;
+            width: 48px;
+            height: 48px;
         }
 
         .user-avatar {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: var(--gradient-1);
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 16px;
-            border: 2px solid var(--border-glass);
+            color: var(--bg-deep);
             position: relative;
+            z-index: 2;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.3;
+            transition: opacity 0.4s ease;
+        }
+
+        .user-card:hover .avatar-ring { opacity: 0.6; }
+
+        .verified-ring {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--success);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+        .verified-ring.show {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .verified-badge {
             position: absolute;
             bottom: -2px;
             right: -2px;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             background: var(--success);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid var(--bg-secondary);
+            border: 3px solid var(--bg-deep);
+            z-index: 10;
             opacity: 0;
             transform: scale(0);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
-
         .verified-badge.show {
             opacity: 1;
             transform: scale(1);
         }
+        .verified-badge svg { width: 10px; height: 10px; color: white; }
 
-        .verified-badge svg {
-            width: 10px;
-            height: 10px;
-            color: white;
-        }
-
-        .user-details {
-            flex: 1;
-        }
-
+        .user-info { flex: 1; }
         .user-name {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            margin-bottom: 4px;
         }
-
         .user-status {
-            font-size: 12px;
-            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-tertiary);
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
         .status-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
             background: var(--success);
             box-shadow: 0 0 8px var(--success);
+            animation: statusBlink 2s ease-in-out infinite;
+        }
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
-        .subscription-tag {
+        .plan-tag {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
-            border-radius: 20px;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
             font-weight: 600;
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.1);
             color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.15);
             transition: all 0.4s ease;
         }
-
-        .subscription-tag.paid {
-            background: rgba(0, 212, 170, 0.15);
+        .plan-tag.pro {
+            background: rgba(0, 240, 200, 0.1);
             color: var(--accent);
-            border-color: rgba(0, 212, 170, 0.3);
-            box-shadow: 0 0 15px rgba(0, 212, 170, 0.2);
+            border-color: rgba(0, 240, 200, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 200, 0.1);
+            animation: proGlow 3s ease-in-out infinite;
+        }
+        @keyframes proGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 200, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(0, 240, 200, 0.2); }
+        }
+
+        .upgrade-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-medium);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .upgrade-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 240, 200, 0.05);
+            box-shadow: 0 0 20px rgba(0, 240, 200, 0.1);
         }
 
         /* Main Content */
         .main-content {
-            margin-left: 280px;
+            margin-left: 300px;
             flex: 1;
-            padding: 32px 40px;
-            max-width: calc(100% - 280px);
+            padding: 40px 48px;
+            max-width: calc(100% - 300px);
         }
 
-        .header {
+        /* Top Bar */
+        .top-bar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
+            align-items: flex-start;
+            margin-bottom: 48px;
+            position: relative;
         }
 
-        .header-title h1 {
+        .page-title h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 32px;
+            font-size: 42px;
             font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.5) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
-        .header-title p {
+        .page-title h1::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px;
+        }
+
+        .page-title p {
             color: var(--text-secondary);
             font-size: 15px;
+            max-width: 500px;
+            line-height: 1.6;
         }
 
-        .header-actions {
+        .top-actions {
             display: flex;
             gap: 12px;
             align-items: center;
@@ -364,737 +535,848 @@
         .btn {
             padding: 12px 24px;
             border-radius: 12px;
-            border: 1px solid var(--border-glass);
-            background: var(--bg-glass);
+            border: 1px solid var(--border-medium);
+            background: rgba(255, 255, 255, 0.03);
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             backdrop-filter: blur(10px);
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
         }
 
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        .btn:hover::before { transform: translateX(100%); }
+
         .btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-1px);
+            border-color: var(--border-strong);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .btn-primary {
-            background: var(--gradient-1);
-            border-color: rgba(0, 212, 170, 0.3);
+            background: linear-gradient(135deg, rgba(0, 240, 200, 0.15), rgba(124, 58, 237, 0.15));
+            border-color: rgba(0, 240, 200, 0.2);
             color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
+            position: relative;
         }
-
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 12px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        .btn-primary:hover::after { opacity: 0.6; }
         .btn-primary:hover {
-            box-shadow: 0 0 30px rgba(0, 212, 170, 0.25);
+            box-shadow: 0 0 40px rgba(0, 240, 200, 0.15);
             transform: translateY(-2px);
         }
 
-        .btn-glow {
-            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
-            animation: glow-pulse 2s infinite;
-        }
-
-        @keyframes glow-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 170, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(0, 212, 170, 0.5); }
-        }
-
-        /* Stats Grid */
-        .stats-grid {
+        /* Stats Row */
+        .stats-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 32px;
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
             border-radius: 20px;
-            padding: 24px;
-            backdrop-filter: blur(20px);
-            transition: all 0.4s ease;
+            padding: 28px;
             position: relative;
             overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
         .stat-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 20%; right: 20%;
+            height: 40px;
+            background: linear-gradient(to top, rgba(0, 240, 200, 0.03), transparent);
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.4s;
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transform: translateY(-6px) rotateX(2deg);
+            border-color: var(--border-medium);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(0, 240, 200, 0.05);
         }
+        .stat-card:hover::after { opacity: 1; }
 
         .stat-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+        .stat-icon-wrap {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--gradient-1);
-            border: 1px solid var(--border-glass);
+            background: linear-gradient(135deg, rgba(0, 240, 200, 0.1), rgba(124, 58, 237, 0.1));
+            border: 1px solid rgba(0, 240, 200, 0.1);
+            position: relative;
         }
-
-        .stat-icon svg {
-            width: 20px;
-            height: 20px;
+        .stat-icon-wrap::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            opacity: 0.1;
+            filter: blur(8px);
+        }
+        .stat-icon-wrap svg {
+            width: 22px;
+            height: 22px;
             color: var(--accent);
+            position: relative;
+            z-index: 2;
         }
 
         .stat-trend {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 12px;
             font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(0, 212, 170, 0.1);
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(0, 240, 200, 0.08);
             color: var(--accent);
+            border: 1px solid rgba(0, 240, 200, 0.15);
         }
-
         .stat-trend.down {
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.08);
             color: var(--danger);
+            border-color: rgba(239, 68, 68, 0.15);
         }
 
         .stat-value {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
-            margin-bottom: 4px;
-            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
         .stat-label {
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--text-tertiary);
             font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-progress {
+            margin-top: 16px;
+            height: 3px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        .stat-progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .stat-progress-bar::after {
+            content: '';
+            position: absolute;
+            right: 0; top: -2px;
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
         }
 
         /* Content Grid */
         .content-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 28px;
         }
 
         .panel {
-            background: var(--bg-card);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 28px;
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 32px;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
         }
 
         .panel::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .panel:hover {
+            border-color: var(--border-medium);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
-
         .panel-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
+            letter-spacing: -0.3px;
         }
-
         .panel-action {
-            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
             color: var(--accent);
             cursor: pointer;
             font-weight: 500;
-            transition: opacity 0.3s;
-        }
-
-        .panel-action:hover {
-            opacity: 0.8;
-        }
-
-        /* Email List */
-        .email-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .email-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .email-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: var(--border-glass);
-            transform: translateX(4px);
-        }
-
-        .email-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: var(--gradient-1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-            flex-shrink: 0;
-            border: 1px solid var(--border-glass);
-        }
-
-        .email-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .email-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
-        .email-sender {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .email-time {
-            font-size: 12px;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        .email-subject {
-            font-size: 13px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .email-status {
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 12px;
-            border-radius: 20px;
+        }
+        .panel-action:hover { opacity: 0.7; letter-spacing: 1px; }
+
+        /* Email Table */
+        .email-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .email-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
             font-weight: 600;
-            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .email-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+        .email-row {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .email-row:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .email-row:hover td {
+            border-bottom-color: var(--border-medium);
         }
 
-        .status-read {
-            background: rgba(0, 212, 170, 0.1);
+        .email-sender-cell {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .email-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 240, 200, 0.2), rgba(124, 58, 237, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+        .email-row:hover .email-avatar {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 240, 200, 0.1);
+        }
+
+        .email-sender-info { flex: 1; }
+        .email-sender-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        .email-sender-sub {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 280px;
+        }
+
+        .email-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+        .status-opened {
+            background: rgba(0, 240, 200, 0.06);
             color: var(--accent);
-            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-color: rgba(0, 240, 200, 0.15);
         }
-
-        .status-unread {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-        }
-
         .status-clicked {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--accent-secondary);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(124, 58, 237, 0.06);
+            color: #a78bfa;
+            border-color: rgba(124, 58, 237, 0.15);
+        }
+        .status-pending {
+            background: rgba(245, 158, 11, 0.06);
+            color: var(--warning);
+            border-color: rgba(245, 158, 11, 0.15);
+        }
+
+        .email-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-tertiary);
         }
 
         /* Activity Feed */
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+        .activity-list { display: flex; flex-direction: column; gap: 24px; }
         .activity-item {
             display: flex;
-            gap: 14px;
+            gap: 16px;
             position: relative;
+            padding-left: 4px;
         }
-
         .activity-item:not(:last-child)::after {
             content: '';
             position: absolute;
-            left: 16px;
-            top: 36px;
-            bottom: -20px;
+            left: 19px;
+            top: 40px;
+            bottom: -24px;
             width: 1px;
-            background: linear-gradient(to bottom, var(--border-glass), transparent);
+            background: linear-gradient(to bottom, var(--border-subtle), transparent);
         }
 
         .activity-dot {
-            width: 32px;
-            height: 32px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            border: 1px solid var(--border-glass);
-            background: var(--bg-glass);
+            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
         }
-
-        .activity-dot svg {
-            width: 14px;
-            height: 14px;
+        .activity-item:hover .activity-dot {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 240, 200, 0.1);
         }
+        .activity-dot svg { width: 16px; height: 16px; }
 
-        .activity-content {
-            flex: 1;
-            padding-top: 4px;
-        }
-
+        .activity-content { flex: 1; padding-top: 6px; }
         .activity-text {
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 14px;
+            line-height: 1.6;
             color: var(--text-secondary);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
-
         .activity-text strong {
             color: var(--text-primary);
             font-weight: 600;
         }
-
         .activity-time {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* Chart Area */
-        .chart-container {
-            height: 200px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 20px 0;
-        }
-
-        .chart-bar {
-            flex: 1;
-            background: linear-gradient(to top, var(--accent), rgba(0, 212, 170, 0.3));
-            border-radius: 8px 8px 0 0;
-            position: relative;
-            transition: all 0.4s ease;
-            min-height: 20px;
-            opacity: 0.8;
-        }
-
-        .chart-bar:hover {
-            opacity: 1;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .chart-bar::after {
-            content: attr(data-value);
-            position: absolute;
-            top: -24px;
-            left: 50%;
-            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
-            font-weight: 600;
+            color: var(--text-tertiary);
+        }
+
+        /* Chart Panel */
+        .chart-area {
+            height: 220px;
+            position: relative;
+            margin-top: 20px;
+        }
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+        .chart-line {
+            fill: none;
+            stroke: url(#lineGradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 8px rgba(0, 240, 200, 0.3));
+        }
+        .chart-area-fill {
+            fill: url(#areaGradient);
+            opacity: 0.3;
+        }
+        .chart-grid-line {
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 1;
+        }
+        .chart-point {
+            fill: var(--bg-deep);
+            stroke: var(--accent);
+            stroke-width: 2;
+            r: 5;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .chart-point:hover {
+            r: 8;
+            fill: var(--accent);
+            filter: drop-shadow(0 0 10px var(--accent-glow));
+        }
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid var(--border-medium);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
             color: var(--accent);
+            pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
-        .chart-bar:hover::after {
-            opacity: 1;
-        }
+        .chart-tooltip.show { opacity: 1; }
 
         .chart-labels {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            margin-top: 8px;
+            margin-top: 12px;
+            padding: 0 10px;
+        }
+        .chart-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-tertiary);
         }
 
-        .chart-label {
-            flex: 1;
+        /* Locked Overlay */
+        .locked-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 5, 5, 0.88);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            z-index: 50;
+            gap: 20px;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .locked-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.02);
+        }
+
+        .locked-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .locked-icon::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            opacity: 0.1;
+            filter: blur(15px);
+        }
+        .locked-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--text-tertiary);
+            position: relative;
+            z-index: 2;
+        }
+
+        .locked-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .locked-desc {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            max-width: 260px;
             text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
+            line-height: 1.6;
         }
 
         /* Modal */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 10000;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.4s ease;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
         .modal-overlay.active {
             opacity: 1;
             pointer-events: all;
         }
 
         .modal {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-glass);
-            border-radius: 24px;
-            padding: 40px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-medium);
+            border-radius: 28px;
+            padding: 48px;
             width: 90%;
-            max-width: 480px;
-            transform: scale(0.9) translateY(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            max-width: 520px;
+            transform: scale(0.9) translateY(30px) rotateX(5deg);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
             position: relative;
             overflow: hidden;
         }
-
         .modal-overlay.active .modal {
-            transform: scale(1) translateY(0);
+            transform: scale(1) translateY(0) rotateX(0);
         }
 
         .modal::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
         .modal-glow {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 212, 170, 0.1), transparent 70%);
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 200, 0.08), transparent 70%);
             pointer-events: none;
+            animation: modalGlow 4s ease-in-out infinite;
+        }
+        @keyframes modalGlow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        .modal-close:hover {
+            border-color: var(--border-medium);
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
         }
 
         .modal-header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 36px;
             position: relative;
+            z-index: 2;
         }
-
         .modal-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--gradient-1);
-            border-radius: 20px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(0, 240, 200, 0.1), rgba(124, 58, 237, 0.1));
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            border: 1px solid var(--border-glass);
-            box-shadow: 0 0 30px var(--accent-glow);
+            margin: 0 auto 24px;
+            border: 1px solid rgba(0, 240, 200, 0.15);
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 240, 200, 0.1);
+            animation: modalIconPulse 3s ease-in-out infinite;
         }
-
+        @keyframes modalIconPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 240, 200, 0.1); }
+            50% { box-shadow: 0 0 60px rgba(0, 240, 200, 0.2); }
+        }
         .modal-icon svg {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             color: var(--accent);
+            filter: drop-shadow(0 0 10px var(--accent-glow));
         }
-
         .modal-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
         }
-
         .modal-subtitle {
-            color: var(--text-muted);
-            font-size: 14px;
+            color: var(--text-tertiary);
+            font-size: 15px;
+            line-height: 1.6;
         }
 
-        .code-input-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
+        .code-input-wrap {
+            position: relative;
+            margin-bottom: 28px;
+            z-index: 2;
         }
-
         .code-input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-glass);
-            border-radius: 14px;
-            padding: 16px 20px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-medium);
+            border-radius: 16px;
+            padding: 20px 24px;
             color: var(--text-primary);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
             font-weight: 600;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             text-align: center;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             text-transform: uppercase;
         }
-
         .code-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
-            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 30px rgba(0, 240, 200, 0.1), inset 0 0 20px rgba(0, 240, 200, 0.02);
+            background: rgba(255, 255, 255, 0.05);
         }
-
         .code-input::placeholder {
-            color: var(--text-muted);
+            color: var(--text-tertiary);
             font-weight: 400;
+            letter-spacing: 6px;
         }
 
         .btn-full {
             width: 100%;
             justify-content: center;
-            padding: 16px;
+            padding: 18px;
             font-size: 15px;
             font-weight: 600;
+            z-index: 2;
+            position: relative;
         }
 
         .modal-footer {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 24px;
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--text-tertiary);
+            position: relative;
+            z-index: 2;
         }
-
         .modal-footer a {
             color: var(--accent);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+        .modal-footer a:hover { opacity: 0.7; }
+
+        /* Confetti Canvas */
+        #confettiCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            pointer-events: none;
         }
 
-        /* Toast Notification */
+        /* Toast */
         .toast-container {
             position: fixed;
             top: 24px;
             right: 24px;
-            z-index: 2000;
+            z-index: 999999;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .toast {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-glass);
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid var(--border-medium);
             border-radius: 16px;
-            padding: 16px 20px;
+            padding: 18px 22px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transform: translateX(120%);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            min-width: 300px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform: translateX(150%);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            min-width: 340px;
+            max-width: 420px;
         }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
+        .toast.show { transform: translateX(0); }
         .toast-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
-
         .toast-success .toast-icon {
-            background: rgba(0, 212, 170, 0.15);
+            background: rgba(0, 240, 200, 0.1);
+            border: 1px solid rgba(0, 240, 200, 0.2);
             color: var(--accent);
         }
-
         .toast-error .toast-icon {
-            background: rgba(239, 68, 68, 0.15);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
             color: var(--danger);
         }
-
-        .toast-content {
-            flex: 1;
-        }
-
+        .toast-content { flex: 1; }
         .toast-title {
             font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 2px;
+            font-size: 15px;
+            margin-bottom: 4px;
         }
-
         .toast-message {
             font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* Locked Feature Overlay */
-        .locked-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            z-index: 5;
-            gap: 16px;
-            transition: opacity 0.4s ease;
-        }
-
-        .locked-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .locked-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-glass);
-        }
-
-        .locked-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--text-muted);
-        }
-
-        .locked-text {
-            font-size: 14px;
-            color: var(--text-muted);
-            font-weight: 500;
+            color: var(--text-tertiary);
+            line-height: 1.5;
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 3px;
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .main-content {
-                margin-left: 0;
-                max-width: 100%;
-                padding: 20px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.12); }
 
         /* Animations */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .animate-in {
-            animation: slideIn 0.6s ease forwards;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
         }
-
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; max-width: 100%; padding: 24px; }
+            .stats-row { grid-template-columns: 1fr; }
+        }
     </style>
 <base target="_blank">
 </head>
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
     <!-- Background Effects -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="bg-orb orb-3"></div>
-    <div class="noise-overlay"></div>
+    <canvas id="particleCanvas"></canvas>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confettiCanvas"></canvas>
 
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
@@ -1103,26 +1385,31 @@
     <div class="modal-overlay" id="subscriptionModal">
         <div class="modal">
             <div class="modal-glow"></div>
+            <button class="modal-close" onclick="closeModal()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
             <div class="modal-header">
                 <div class="modal-icon">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
                 </div>
-                <div class="modal-title">Activate Pro Subscription</div>
-                <div class="modal-subtitle">Enter your license code to unlock all premium features</div>
+                <div class="modal-title">Unlock Pro Intelligence</div>
+                <div class="modal-subtitle">Enter your enterprise license key to activate all premium tracking features and real-time analytics.</div>
             </div>
-            <div class="code-input-group">
+            <div class="code-input-wrap">
                 <input type="text" class="code-input" id="codeInput" placeholder="XXXX-XXXX-XXXX" maxlength="14">
             </div>
-            <button class="btn btn-primary btn-full btn-glow" id="activateBtn" onclick="activateSubscription()">
+            <button class="btn btn-primary btn-full" id="activateBtn" onclick="activateSubscription()">
                 <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
                 Activate License
             </button>
             <div class="modal-footer">
-                Need a license? <a href="#">Contact Sales</a>
+                Need an enterprise license? <a href="#">Contact Sales Team</a>
             </div>
         </div>
     </div>
@@ -1130,74 +1417,83 @@
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="logo">
-                <div class="logo-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <div class="logo-text">Pro<span>Mail</span></div>
-            </div>
-
-            <div class="nav-section">
-                <div class="nav-label">Dashboard</div>
-                <div class="nav-item active" onclick="setActive(this)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-                    Overview
-                </div>
-                <div class="nav-item" onclick="setActive(this)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                    Analytics
-                </div>
-                <div class="nav-item" onclick="setActive(this)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Real-time
-                    <span class="nav-badge">LIVE</span>
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-mark">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">Pro<span>Mail</span></div>
                 </div>
             </div>
 
-            <div class="nav-section">
-                <div class="nav-label">Management</div>
-                <div class="nav-item" onclick="setActive(this)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
-                    Campaigns
+            <div class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-label">Dashboard</div>
+                    <div class="nav-item active" onclick="setActive(this)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                        Overview
+                    </div>
+                    <div class="nav-item" onclick="setActive(this)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        Analytics
+                    </div>
+                    <div class="nav-item" onclick="setActive(this)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Real-time
+                        <span class="nav-badge">LIVE</span>
+                    </div>
                 </div>
-                <div class="nav-item" onclick="setActive(this)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                    Contacts
-                </div>
-                <div class="nav-item" onclick="setActive(this)">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    Settings
+
+                <div class="nav-section">
+                    <div class="nav-label">Management</div>
+                    <div class="nav-item" onclick="setActive(this)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                        Campaigns
+                    </div>
+                    <div class="nav-item" onclick="setActive(this)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        Contacts
+                    </div>
+                    <div class="nav-item" onclick="setActive(this)">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Settings
+                    </div>
                 </div>
             </div>
 
-            <div class="user-profile">
-                <div class="user-info">
-                    <div class="user-avatar">
-                        AK
+            <div class="user-card">
+                <div class="user-main">
+                    <div class="user-avatar-wrap">
+                        <div class="avatar-ring"></div>
+                        <div class="verified-ring" id="verifiedRing"></div>
+                        <div class="user-avatar">AK</div>
                         <div class="verified-badge" id="verifiedBadge">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                             </svg>
                         </div>
                     </div>
-                    <div class="user-details">
+                    <div class="user-info">
                         <div class="user-name">Ahmed Khan</div>
                         <div class="user-status">
                             <span class="status-dot"></span>
-                            Online
+                            <span style="font-family: 'JetBrains Mono', monospace;">ONLINE</span>
                         </div>
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span class="subscription-tag" id="subscriptionTag">
+                    <span class="plan-tag" id="planTag">
                         <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: 4px;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                         </svg>
-                        Free Plan
+                        FREE
                     </span>
-                    <button class="btn btn-primary" style="padding: 6px 14px; font-size: 12px;" onclick="openModal()" id="upgradeBtn">
+                    <button class="upgrade-btn" onclick="openModal()" id="upgradeBtn">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
                         Upgrade
                     </button>
                 </div>
@@ -1206,19 +1502,19 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <div class="header animate-in">
-                <div class="header-title">
+            <div class="top-bar animate-in">
+                <div class="page-title">
                     <h1>Dashboard Overview</h1>
-                    <p>Track, analyze, and optimize your email performance in real-time.</p>
+                    <p>Enterprise-grade email tracking with real-time intelligence, advanced analytics, and predictive insights.</p>
                 </div>
-                <div class="header-actions">
+                <div class="top-actions">
                     <button class="btn" onclick="openModal()">
                         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                         </svg>
                         New Campaign
                     </button>
-                    <button class="btn btn-primary" onclick="openModal()">
+                    <button class="btn btn-primary" onclick="openModal()" id="headerUpgradeBtn">
                         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
@@ -1228,139 +1524,177 @@
             </div>
 
             <!-- Stats -->
-            <div class="stats-grid">
+            <div class="stats-row">
                 <div class="stat-card animate-in delay-1">
                     <div class="stat-header">
-                        <div class="stat-icon">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <div class="stat-icon-wrap">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         </div>
                         <span class="stat-trend">+12.5%</span>
                     </div>
                     <div class="stat-value" id="statEmails">24,592</div>
                     <div class="stat-label">Emails Tracked</div>
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 65%"></div>
+                    </div>
                 </div>
 
                 <div class="stat-card animate-in delay-2">
                     <div class="stat-header">
-                        <div class="stat-icon">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        <div class="stat-icon-wrap">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         </div>
                         <span class="stat-trend">+8.2%</span>
                     </div>
                     <div class="stat-value" id="statOpens">18,431</div>
                     <div class="stat-label">Total Opens</div>
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 78%"></div>
+                    </div>
                 </div>
 
                 <div class="stat-card animate-in delay-3">
                     <div class="stat-header">
-                        <div class="stat-icon">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                        <div class="stat-icon-wrap">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
                         </div>
                         <span class="stat-trend down">-2.1%</span>
                     </div>
                     <div class="stat-value" id="statClicks">3,847</div>
                     <div class="stat-label">Link Clicks</div>
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 42%"></div>
+                    </div>
                 </div>
 
                 <div class="stat-card animate-in delay-4">
                     <div class="stat-header">
-                        <div class="stat-icon">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                        <div class="stat-icon-wrap">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         </div>
                         <span class="stat-trend">+24.8%</span>
                     </div>
                     <div class="stat-value" id="statRate">74.9%</div>
                     <div class="stat-label">Open Rate</div>
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 74%"></div>
+                    </div>
                 </div>
             </div>
 
             <!-- Content Grid -->
             <div class="content-grid">
-                <!-- Recent Emails -->
-                <div class="panel animate-in delay-2" style="position: relative;">
+                <!-- Emails Panel -->
+                <div class="panel animate-in delay-3" style="position: relative;">
                     <div class="locked-overlay" id="emailsLocked">
                         <div class="locked-icon">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
                         </div>
-                        <div class="locked-text">Upgrade to Pro to view detailed email analytics</div>
-                        <button class="btn btn-primary" onclick="openModal()">Unlock Now</button>
+                        <div class="locked-title">Premium Analytics Locked</div>
+                        <div class="locked-desc">Upgrade to Pro to unlock detailed email tracking, engagement metrics, and recipient behavior analysis.</div>
+                        <button class="btn btn-primary" onclick="openModal()">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            Unlock Pro Features
+                        </button>
                     </div>
                     <div class="panel-header">
                         <div class="panel-title">Recent Tracked Emails</div>
                         <div class="panel-action">View All →</div>
                     </div>
-                    <div class="email-list">
-                        <div class="email-item">
-                            <div class="email-avatar">JD</div>
-                            <div class="email-content">
-                                <div class="email-header">
-                                    <span class="email-sender">John Davidson</span>
-                                    <span class="email-time">2 min ago</span>
-                                </div>
-                                <div class="email-subject">Q3 Marketing Proposal — Review Required</div>
-                            </div>
-                            <span class="email-status status-read">● Opened</span>
-                        </div>
-                        <div class="email-item">
-                            <div class="email-avatar">SM</div>
-                            <div class="email-content">
-                                <div class="email-header">
-                                    <span class="email-sender">Sarah Mitchell</span>
-                                    <span class="email-time">15 min ago</span>
-                                </div>
-                                <div class="email-subject">Contract Renewal 2024 — Terms Update</div>
-                            </div>
-                            <span class="email-status status-clicked">● Clicked</span>
-                        </div>
-                        <div class="email-item">
-                            <div class="email-avatar">RK</div>
-                            <div class="email-content">
-                                <div class="email-header">
-                                    <span class="email-sender">Robert Kim</span>
-                                    <span class="email-time">1 hour ago</span>
-                                </div>
-                                <div class="email-subject">Product Launch Timeline — Final Approval</div>
-                            </div>
-                            <span class="email-status status-unread">○ Unread</span>
-                        </div>
-                        <div class="email-item">
-                            <div class="email-avatar">EL</div>
-                            <div class="email-content">
-                                <div class="email-header">
-                                    <span class="email-sender">Emma Liu</span>
-                                    <span class="email-time">3 hours ago</span>
-                                </div>
-                                <div class="email-subject">Invoice #2847 — Payment Confirmation</div>
-                            </div>
-                            <span class="email-status status-read">● Opened</span>
-                        </div>
-                        <div class="email-item">
-                            <div class="email-avatar">MJ</div>
-                            <div class="email-content">
-                                <div class="email-header">
-                                    <span class="email-sender">Michael Johnson</span>
-                                    <span class="email-time">5 hours ago</span>
-                                </div>
-                                <div class="email-subject">Board Meeting Notes — Action Items</div>
-                            </div>
-                            <span class="email-status status-clicked">● Clicked</span>
-                        </div>
-                    </div>
+                    <table class="email-table">
+                        <thead>
+                            <tr>
+                                <th>Recipient</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="email-row">
+                                <td>
+                                    <div class="email-sender-cell">
+                                        <div class="email-avatar">JD</div>
+                                        <div class="email-sender-info">
+                                            <div class="email-sender-name">John Davidson</div>
+                                            <div class="email-sender-sub">Q3 Marketing Proposal — Review Required</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="email-status status-opened">● Opened</span></td>
+                                <td><span class="email-time">2m ago</span></td>
+                            </tr>
+                            <tr class="email-row">
+                                <td>
+                                    <div class="email-sender-cell">
+                                        <div class="email-avatar">SM</div>
+                                        <div class="email-sender-info">
+                                            <div class="email-sender-name">Sarah Mitchell</div>
+                                            <div class="email-sender-sub">Contract Renewal 2024 — Terms Update</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="email-status status-clicked">● Clicked</span></td>
+                                <td><span class="email-time">15m ago</span></td>
+                            </tr>
+                            <tr class="email-row">
+                                <td>
+                                    <div class="email-sender-cell">
+                                        <div class="email-avatar">RK</div>
+                                        <div class="email-sender-info">
+                                            <div class="email-sender-name">Robert Kim</div>
+                                            <div class="email-sender-sub">Product Launch Timeline — Final Approval</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="email-status status-pending">○ Pending</span></td>
+                                <td><span class="email-time">1h ago</span></td>
+                            </tr>
+                            <tr class="email-row">
+                                <td>
+                                    <div class="email-sender-cell">
+                                        <div class="email-avatar">EL</div>
+                                        <div class="email-sender-info">
+                                            <div class="email-sender-name">Emma Liu</div>
+                                            <div class="email-sender-sub">Invoice #2847 — Payment Confirmation</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="email-status status-opened">● Opened</span></td>
+                                <td><span class="email-time">3h ago</span></td>
+                            </tr>
+                            <tr class="email-row">
+                                <td>
+                                    <div class="email-sender-cell">
+                                        <div class="email-avatar">MJ</div>
+                                        <div class="email-sender-info">
+                                            <div class="email-sender-name">Michael Johnson</div>
+                                            <div class="email-sender-sub">Board Meeting Notes — Action Items</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="email-status status-clicked">● Clicked</span></td>
+                                <td><span class="email-time">5h ago</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- Right Column -->
-                <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div style="display: flex; flex-direction: column; gap: 28px;">
                     <!-- Activity -->
-                    <div class="panel animate-in delay-3" style="position: relative;">
+                    <div class="panel animate-in delay-4" style="position: relative;">
                         <div class="locked-overlay" id="activityLocked">
                             <div class="locked-icon">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                             </div>
-                            <div class="locked-text">Pro feature — Real-time activity feed</div>
+                            <div class="locked-title">Live Activity Feed</div>
+                            <div class="locked-desc">Real-time notifications, engagement tracking, and instant recipient behavior alerts.</div>
                             <button class="btn btn-primary" onclick="openModal()">Unlock Now</button>
                         </div>
                         <div class="panel-header">
@@ -1378,7 +1712,7 @@
                                 </div>
                             </div>
                             <div class="activity-item">
-                                <div class="activity-dot" style="color: var(--accent-secondary);">
+                                <div class="activity-dot" style="color: #a78bfa;">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
                                 </div>
                                 <div class="activity-content">
@@ -1407,29 +1741,53 @@
                         </div>
                     </div>
 
-                    <!-- Weekly Chart -->
-                    <div class="panel animate-in delay-4" style="position: relative;">
+                    <!-- Chart Panel -->
+                    <div class="panel animate-in delay-5" style="position: relative;">
                         <div class="locked-overlay" id="chartLocked">
                             <div class="locked-icon">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                             </div>
-                            <div class="locked-text">Pro analytics — Weekly insights</div>
+                            <div class="locked-title">Advanced Analytics</div>
+                            <div class="locked-desc">Interactive charts, predictive insights, and detailed engagement metrics.</div>
                             <button class="btn btn-primary" onclick="openModal()">Unlock Now</button>
                         </div>
                         <div class="panel-header">
                             <div class="panel-title">Weekly Performance</div>
-                            <div class="panel-action">Details</div>
+                            <div class="panel-action">Details →</div>
                         </div>
-                        <div class="chart-container">
-                            <div class="chart-bar" style="height: 45%;" data-value="1,240"></div>
-                            <div class="chart-bar" style="height: 62%;" data-value="1,680"></div>
-                            <div class="chart-bar" style="height: 38%;" data-value="1,020"></div>
-                            <div class="chart-bar" style="height: 78%;" data-value="2,120"></div>
-                            <div class="chart-bar" style="height: 55%;" data-value="1,490"></div>
-                            <div class="chart-bar" style="height: 85%;" data-value="2,310"></div>
-                            <div class="chart-bar" style="height: 92%;" data-value="2,540"></div>
+                        <div class="chart-area">
+                            <svg class="chart-svg" viewBox="0 0 400 200" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#00f0c8"/>
+                                        <stop offset="100%" style="stop-color:#7c3aed"/>
+                                    </linearGradient>
+                                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#00f0c8;stop-opacity:0.3"/>
+                                        <stop offset="100%" style="stop-color:#00f0c8;stop-opacity:0"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid lines -->
+                                <line class="chart-grid-line" x1="0" y1="50" x2="400" y2="50"/>
+                                <line class="chart-grid-line" x1="0" y1="100" x2="400" y2="100"/>
+                                <line class="chart-grid-line" x1="0" y1="150" x2="400" y2="150"/>
+                                <!-- Area fill -->
+                                <path class="chart-area-fill" d="M0,180 L57,140 L114,165 L171,90 L228,120 L285,60 L342,75 L400,30 L400,200 L0,200 Z"/>
+                                <!-- Line -->
+                                <path class="chart-line" d="M0,180 L57,140 L114,165 L171,90 L228,120 L285,60 L342,75 L400,30"/>
+                                <!-- Points -->
+                                <circle class="chart-point" cx="0" cy="180" data-value="1,240"/>
+                                <circle class="chart-point" cx="57" cy="140" data-value="1,680"/>
+                                <circle class="chart-point" cx="114" cy="165" data-value="1,020"/>
+                                <circle class="chart-point" cx="171" cy="90" data-value="2,120"/>
+                                <circle class="chart-point" cx="228" cy="120" data-value="1,490"/>
+                                <circle class="chart-point" cx="285" cy="60" data-value="2,310"/>
+                                <circle class="chart-point" cx="342" cy="75" data-value="2,540"/>
+                                <circle class="chart-point" cx="400" cy="30" data-value="2,890"/>
+                            </svg>
+                            <div class="chart-tooltip" id="chartTooltip"></div>
                         </div>
                         <div class="chart-labels">
                             <div class="chart-label">Mon</div>
@@ -1447,11 +1805,121 @@
     </div>
 
     <script>
-        // Valid subscription codes (demo purposes)
+        // ==================== PARTICLE BACKGROUND ====================
+        const particleCanvas = document.getElementById('particleCanvas');
+        const pCtx = particleCanvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = 80;
+        const CONNECTION_DIST = 150;
+
+        function resizeCanvas() {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particleCanvas.width;
+                this.y = Math.random() * particleCanvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > particleCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > particleCanvas.height) this.vy *= -1;
+            }
+            draw() {
+                pCtx.beginPath();
+                pCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                pCtx.fillStyle = `rgba(0, 240, 200, ${this.opacity})`;
+                pCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < CONNECTION_DIST) {
+                        const opacity = (1 - dist / CONNECTION_DIST) * 0.15;
+                        pCtx.beginPath();
+                        pCtx.moveTo(particles[i].x, particles[i].y);
+                        pCtx.lineTo(particles[j].x, particles[j].y);
+                        pCtx.strokeStyle = `rgba(0, 240, 200, ${opacity})`;
+                        pCtx.lineWidth = 1;
+                        pCtx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ==================== CUSTOM CURSOR ====================
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX - 3 + 'px';
+            cursorDot.style.top = mouseY - 3 + 'px';
+        });
+
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = ringX - 20 + 'px';
+            cursorRing.style.top = ringY - 20 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effects for cursor
+        document.querySelectorAll('button, .nav-item, .email-row, .panel-action').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+        });
+
+        // ==================== CHART TOOLTIP ====================
+        const chartPoints = document.querySelectorAll('.chart-point');
+        const chartTooltip = document.getElementById('chartTooltip');
+        chartPoints.forEach(point => {
+            point.addEventListener('mouseenter', (e) => {
+                const rect = e.target.getBoundingClientRect();
+                const parent = e.target.closest('.chart-area').getBoundingClientRect();
+                chartTooltip.textContent = e.target.getAttribute('data-value') + ' opens';
+                chartTooltip.style.left = (rect.left - parent.left + 10) + 'px';
+                chartTooltip.style.top = (rect.top - parent.top - 40) + 'px';
+                chartTooltip.classList.add('show');
+            });
+            point.addEventListener('mouseleave', () => {
+                chartTooltip.classList.remove('show');
+            });
+        });
+
+        // ==================== SUBSCRIPTION SYSTEM ====================
         const VALID_CODES = ['PRO-2024-UNLOCK', 'PREMIUM-ACCESS-99', 'VIP-TRACKER-2024'];
         let isSubscribed = false;
 
-        // Format code input
         const codeInput = document.getElementById('codeInput');
         codeInput.addEventListener('input', function(e) {
             let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
@@ -1462,10 +1930,7 @@
             }
             e.target.value = formatted;
         });
-
-        codeInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') activateSubscription();
-        });
+        codeInput.addEventListener('keypress', e => { if (e.key === 'Enter') activateSubscription(); });
 
         function openModal() {
             if (isSubscribed) {
@@ -1473,7 +1938,7 @@
                 return;
             }
             document.getElementById('subscriptionModal').classList.add('active');
-            setTimeout(() => codeInput.focus(), 300);
+            setTimeout(() => codeInput.focus(), 400);
         }
 
         function closeModal() {
@@ -1485,118 +1950,167 @@
             if (e.target === this) closeModal();
         });
 
+        // ==================== CONFETTI ====================
+        const confettiCanvas = document.getElementById('confettiCanvas');
+        const cCtx = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+
+        function resizeConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        resizeConfetti();
+        window.addEventListener('resize', resizeConfetti);
+
+        function fireConfetti() {
+            confettiParticles = [];
+            const colors = ['#00f0c8', '#7c3aed', '#f59e0b', '#10b981', '#ef4444', '#ffffff'];
+            for (let i = 0; i < 150; i++) {
+                confettiParticles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.5) * 20 - 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 6 + 2,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 10,
+                    gravity: 0.2,
+                    drag: 0.98
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            if (confettiParticles.length === 0) {
+                cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                return;
+            }
+            cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            confettiParticles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += p.gravity;
+                p.vx *= p.drag;
+                p.vy *= p.drag;
+                p.rotation += p.rotationSpeed;
+                cCtx.save();
+                cCtx.translate(p.x, p.y);
+                cCtx.rotate(p.rotation * Math.PI / 180);
+                cCtx.fillStyle = p.color;
+                cCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                cCtx.restore();
+                if (p.y > window.innerHeight + 50) confettiParticles.splice(i, 1);
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+
+        // ==================== ACTIVATION ====================
         function activateSubscription() {
             const code = codeInput.value.trim();
-
             if (!code) {
                 showToast('Error', 'Please enter a license code', 'error');
                 codeInput.focus();
                 return;
             }
 
-            // Simulate API call
             const btn = document.getElementById('activateBtn');
-            btn.innerHTML = '<span style="display: inline-block; width: 18px; height: 18px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite;"></span> Verifying...';
+            btn.innerHTML = '<span style="display:inline-block;width:18px;height:18px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></span> Verifying...';
             btn.style.pointerEvents = 'none';
 
             setTimeout(() => {
                 if (VALID_CODES.includes(code) || code.length === 14) {
                     isSubscribed = true;
                     closeModal();
-
-                    // Update UI
                     updateSubscriptionUI();
-
-                    showToast('Welcome to Pro!', 'Your subscription has been activated successfully.', 'success');
+                    fireConfetti();
+                    showToast('Welcome to Pro Intelligence', 'Your enterprise license has been activated. All premium features are now unlocked.', 'success');
                 } else {
-                    showToast('Invalid Code', 'The license code you entered is invalid. Please try again.', 'error');
+                    showToast('Invalid License', 'The code you entered is invalid. Please check and try again.', 'error');
                     btn.innerHTML = `<svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Activate License`;
                     btn.style.pointerEvents = 'all';
                     codeInput.value = '';
                     codeInput.focus();
                 }
-            }, 1500);
+            }, 1800);
         }
 
         function updateSubscriptionUI() {
-            // Update badge
-            const badge = document.getElementById('verifiedBadge');
-            badge.classList.add('show');
+            // Verified badge
+            document.getElementById('verifiedBadge').classList.add('show');
+            document.getElementById('verifiedRing').classList.add('show');
 
-            // Update subscription tag
-            const tag = document.getElementById('subscriptionTag');
-            tag.classList.add('paid');
+            // Plan tag
+            const tag = document.getElementById('planTag');
+            tag.classList.add('pro');
             tag.innerHTML = `
-                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline; vertical-align: middle; margin-right: 4px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:inline;vertical-align:middle;margin-right:4px;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Pro Plan
+                PRO
             `;
 
-            // Hide upgrade button
+            // Hide upgrade buttons
             document.getElementById('upgradeBtn').style.display = 'none';
+            const headerBtn = document.getElementById('headerUpgradeBtn');
+            headerBtn.innerHTML = `
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Pro Active
+            `;
+            headerBtn.style.cursor = 'default';
+            headerBtn.onclick = null;
 
-            // Unlock panels
-            document.getElementById('emailsLocked').classList.add('hidden');
-            document.getElementById('activityLocked').classList.add('hidden');
-            document.getElementById('chartLocked').classList.add('hidden');
+            // Unlock panels with stagger
+            setTimeout(() => document.getElementById('emailsLocked').classList.add('hidden'), 200);
+            setTimeout(() => document.getElementById('activityLocked').classList.add('hidden'), 400);
+            setTimeout(() => document.getElementById('chartLocked').classList.add('hidden'), 600);
 
-            // Update header button
-            const headerBtn = document.querySelector('.header-actions .btn-primary');
-            if (headerBtn) {
-                headerBtn.innerHTML = `
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Pro Active
-                `;
-                headerBtn.onclick = null;
-                headerBtn.style.cursor = 'default';
-            }
-
-            // Animate stats increase
+            // Animate stats
             animateValue('statEmails', 24592, 48291, 2000);
             animateValue('statOpens', 18431, 36542, 2000);
             animateValue('statClicks', 3847, 8941, 2000);
             animateValue('statRate', 74.9, 89.2, 2000, '%');
+
+            // Update progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.stat-progress-bar')[0].style.width = '92%';
+                document.querySelectorAll('.stat-progress-bar')[1].style.width = '88%';
+                document.querySelectorAll('.stat-progress-bar')[2].style.width = '76%';
+                document.querySelectorAll('.stat-progress-bar')[3].style.width = '89%';
+            }, 800);
         }
 
         function animateValue(id, start, end, duration, suffix = '') {
             const obj = document.getElementById(id);
             const range = end - start;
-            const minTimer = 50;
-            let stepTime = Math.abs(Math.floor(duration / range));
-            stepTime = Math.max(stepTime, minTimer);
-            let startTime = new Date().getTime();
-            let endTime = startTime + duration;
-            let timer;
+            const startTime = new Date().getTime();
+            const endTime = startTime + duration;
 
             function run() {
-                let now = new Date().getTime();
-                let remaining = Math.max((endTime - now) / duration, 0);
-                let value = Math.round(end - (remaining * range));
+                const now = new Date().getTime();
+                const remaining = Math.max((endTime - now) / duration, 0);
+                const value = Math.round(end - (remaining * range));
                 if (suffix === '%') {
                     obj.innerHTML = (value / 100).toFixed(1) + '%';
                 } else {
                     obj.innerHTML = value.toLocaleString();
                 }
-                if (value == end) {
-                    clearInterval(timer);
-                }
+                if (value !== end) requestAnimationFrame(run);
             }
-            timer = setInterval(run, stepTime);
             run();
         }
 
+        // ==================== TOAST ====================
         function showToast(title, message, type) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast toast-${type}`;
-
-            const iconSvg = type === 'success' 
-                ? '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'
-                : '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
-
+            const iconSvg = type === 'success'
+                ? '<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'
+                : '<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
             toast.innerHTML = `
                 <div class="toast-icon">${iconSvg}</div>
                 <div class="toast-content">
@@ -1604,14 +2118,12 @@
                     <div class="toast-message">${message}</div>
                 </div>
             `;
-
             container.appendChild(toast);
-
             setTimeout(() => toast.classList.add('show'), 10);
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
+                setTimeout(() => toast.remove(), 600);
+            }, 5000);
         }
 
         function setActive(element) {
@@ -1619,22 +2131,18 @@
             element.classList.add('active');
         }
 
-        // Add spin animation for loader
+        // Add spin keyframe
         const style = document.createElement('style');
-        style.textContent = `
-            @keyframes spin {
-                to { transform: rotate(360deg); }
-            }
-        `;
+        style.textContent = `@keyframes spin { to { transform: rotate(360deg); } }`;
         document.head.appendChild(style);
 
-        // Random stat updates for demo
+        // Real-time updates
         setInterval(() => {
             if (isSubscribed) {
                 const emails = parseInt(document.getElementById('statEmails').innerHTML.replace(/,/g, ''));
                 document.getElementById('statEmails').innerHTML = (emails + Math.floor(Math.random() * 3)).toLocaleString();
             }
-        }, 5000);
+        }, 6000);
     </script>
 </body>
 </html>
